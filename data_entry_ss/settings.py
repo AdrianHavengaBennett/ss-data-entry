@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # DEBUG = (os.getenv('DEBUG_VALUE') == True)
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ss-data-entry.herokuapp.com']
 
 
 # Application definition
