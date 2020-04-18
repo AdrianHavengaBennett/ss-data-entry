@@ -1,0 +1,1 @@
+web: gunicorn data_entry_ss.wsgi
