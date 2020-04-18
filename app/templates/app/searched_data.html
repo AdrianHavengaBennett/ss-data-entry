@@ -1,0 +1,25 @@
+{% extends "app/base.html" %}
+{% block content %}
+
+{% for d in obj %}
+
+	<p class="lead">WorkOrder Number: {{ d.wo_number }}</p>
+	<p class="lead">Plentific Job Number: {{ d.plentific_job_number }}</p>
+	<p class="lead">Customer Name: {{ d.customer_name }}</p>
+	<p class="lead">Invoice Number: {{ d.invoice_number }}</p>
+	<p class="lead">Commission Pre-Vat: {{ d.commission_pre_vat }}</p>
+	<p class="lead">Payments: {{ d.payments }}</p>
+	<p class="lead">Job Description: {{ d.job_description }}</p>
+	<form method="GET" action="{% url 'edit_data' d.id %}">
+		<button class="btn btn-success" type="submit">Edit</button>
+	</form>
+	<hr>
+
+{% empty %}
+	<h1>Whoops!</h1>
+
+	<p class="lead">Plentific Job Number {{ inputted_job_number }} not found</p>
+
+{% endfor %}
+
+{% endblock %}

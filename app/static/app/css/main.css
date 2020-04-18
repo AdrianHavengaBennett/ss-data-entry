@@ -1,0 +1,9 @@
+.lead {
+    font-size: 16px;
+}
+
+a,
+a:hover {
+	color: #ffffff;
+	text-decoration: none;
+}

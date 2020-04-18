@@ -1,0 +1,20 @@
+{% extends "app/base.html" %}
+{% block content %}
+
+<p class="lead"><strong>Multiple jobs found:</strong></p>
+<hr>
+
+{% for d in obj %}
+
+	<p class="lead">WorkOrder Number: {{ d.wo_number }}</p>
+	<p class="lead">Plentific Job Number: {{ d.plentific_job_number }}</p>
+	<p class="lead">Customer Name: {{ d.customer_name }}</p>
+	<p class="lead">Invoice Number: {{ d.invoice_number }}</p>
+	<p class="lead">Commission Pre-Vat: {{ d.commission_pre_vat }}</p>
+	<p class="lead">Payments: {{ d.payments }}</p>
+	<p class="lead">Job Description: {{ d.job_description }}</p>
+	<hr>
+
+{% endfor %}
+
+{% endblock %}

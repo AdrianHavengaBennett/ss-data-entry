@@ -1,0 +1,41 @@
+{% extends "app/base.html" %}
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<div class="jumbotron">
+
+	<h1>Data Entry Tool:</h1>
+
+	<form action="{% url 'search_update_feedback' %}" method="GET">
+		{{ form|crispy }}
+		<button class="btn btn-success" type="submit" data-toggle="tooltip" data-placement="right" title="Updates the database with the info provided above">
+			Update and Fetch Info
+		</button>
+	</form>
+
+	<br>
+
+	<form action="{% url 'export_job_info_report' %}" method="GET">
+		<button class="btn btn-success" type="submit" data-toggle="tooltip" data-placement="right" title="Downloads the report below in .xlsx format">
+			Download Report
+		</button>
+	</form>
+
+	<br>
+
+	<form action="{% url 'clear_report_info' %}" method="GET">
+		<button class="btn btn-success" type="submit" data-toggle="tooltip" data-placement="right" title="Warning! You will lose all of the data below (does not affect database data)">
+			Clear Report - hover over me!
+		</button>
+	</form>
+
+</div>
+
+<hr>
+
+{% if not df_html.empty %}
+	{{ df_html | safe }}
+{% endif %}
+
+{% endblock %}
