@@ -1,9 +1,5 @@
-{% extends "app/base.html" %}
+{% extends "base.html" %}
 {% block content %}
-
-<h1>All dummy data:</h1>
-
-<br>
 
 {% for d in obj %}
 
@@ -20,7 +16,9 @@
 	<hr>
 
 {% empty %}
-	<p>Nothing in here.</p>
+	<h1>Whoops!</h1>
+
+	<p class="lead">Plentific Job Number {{ inputted_job_number }} not found</p>
 
 {% endfor %}
 

@@ -55,7 +55,7 @@ def all_data(request):
 
 	obj = Data.objects.all()
 
-	return render(request, "app/all_data.html", {"obj": obj})
+	return render(request, "all_data.html", {"obj": obj})
 
 
 def add_data(request):
@@ -73,7 +73,7 @@ def add_data(request):
 	else:
 		form = DataForm()
 
-	return render(request, "app/add_data.html", {"form": form})
+	return render(request, "add_data.html", {"form": form})
 
 
 def data_entry(request):
@@ -95,10 +95,10 @@ def data_entry(request):
 
 	if not df.empty:
 		df_html = df.to_html(classes="table table-striped table-hover")
-		return render(request, "app/data_entry.html", {
+		return render(request, "data_entry.html", {
 			"form": form, "df_html": df_html})	
 	else:
-		return render(request, "app/data_entry.html", {
+		return render(request, "data_entry.html", {
 				"form": form})
 
 
@@ -120,7 +120,7 @@ def edit_data(request, id):
 	else:
 		form = DataForm(instance=item)
 
-	return render(request, "app/add_data.html", {"form": form})
+	return render(request, "add_data.html", {"form": form})
 
 
 def search_data(request):
@@ -138,18 +138,18 @@ def search_data(request):
 	try:
 		obj = Data.objects.filter(plentific_job_number=inputted_job_number)
 
-		return render(request, "app/searched_data.html", {"obj": obj,
+		return render(request, "searched_data.html", {"obj": obj,
 			"inputted_job_number": inputted_job_number})
 
 	except ObjectDoesNotExist:
 		
-		return render(request, "app/not_found.html", {
+		return render(request, "not_found.html", {
 			"inputted_job_number": inputted_job_number})
 
 	except MultipleObjectsReturned:
 		obj = Data.objects.filter(plentific_job_number=inputted_job_number)
 
-		return render(request, "app/multiples_search.html", {"obj": obj})
+		return render(request, "multiples_search.html", {"obj": obj})
 
 
 def search_update_feedback(request):
@@ -186,7 +186,7 @@ def search_update_feedback(request):
 
 		inputted_payment = float(request.GET["payments"])
 
-		return render(request, "app/multiples_update.html", {
+		return render(request, "multiples_update.html", {
 			"obj": obj, "commission_pre_vat": request.GET["commission_pre_vat"],
 			"payments": inputted_payment})
 
