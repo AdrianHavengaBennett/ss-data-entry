@@ -16,6 +16,11 @@ from os import path
 if path.exists('env.py'):
     import env
 
+if os.getenv('DEBUG_VALUE'):
+    development = True
+else:
+    development = False
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,7 +32,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = (os.getenv('DEBUG_VALUE') == 'True')
+DEBUG = development
 
 ALLOWED_HOSTS = ['ss-data-entry.herokuapp.com']
 
