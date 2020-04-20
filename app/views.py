@@ -93,13 +93,10 @@ def data_entry(request):
 			"Job Number Exists",
 		])
 
-	if not df.empty:
-		df_html = df.to_html(classes="table table-striped table-hover")
-		return render(request, "data_entry.html", {
-			"form": form, "df_html": df_html})	
-	else:
-		return render(request, "data_entry.html", {
-				"form": form})
+	df_html = df.to_html(classes="table table-striped table-hover")
+
+	return render(request, "data_entry.html", {
+		"form": form, "df_html": df_html})
 
 
 def edit_data(request, id):
