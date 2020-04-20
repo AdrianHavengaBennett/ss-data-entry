@@ -47,7 +47,7 @@ def do_update_and_collect_job_info(request, obj, commission_pre_vat=0, payments=
 	else:
 		JOB_INFO["Payments"].append("match")
 
-	return redirect(data_entry)
+	return redirect(reverse(data_entry))
 
 
 def all_data(request):
@@ -69,7 +69,7 @@ def add_data(request):
 		if form.is_valid():
 			form.save()
 
-		return redirect(all_data)
+		return redirect(reverse(all_data))
 	else:
 		form = DataForm()
 
@@ -116,7 +116,7 @@ def edit_data(request, id):
 		if form.is_valid():
 			form.save()
 
-		return redirect(all_data)
+		return redirect(reverse(all_data))
 	else:
 		form = DataForm(instance=item)
 
@@ -170,7 +170,7 @@ def search_update_feedback(request):
 
 		do_update_and_collect_job_info(request, obj)
 
-		return redirect(data_entry)
+		return redirect(reverse(data_entry))
 
 	except ObjectDoesNotExist:
 		JOB_INFO["Plentific Job Number"].append("N/A")
@@ -179,7 +179,7 @@ def search_update_feedback(request):
 		JOB_INFO["Payments"].append("N/A")
 		JOB_INFO["Job Number Exists"].append("Plentific Job Number {} not found".format(inputted_job_number))
 
-		return redirect(data_entry)
+		return redirect(reverse(data_entry))
 
 	except MultipleObjectsReturned:
 		obj = Data.objects.filter(plentific_job_number=inputted_job_number)
@@ -203,7 +203,7 @@ def edit_specific(request, id, commission_pre_vat, payments):
 
 	do_update_and_collect_job_info(request, obj, commission_pre_vat, payments)
 
-	return redirect(data_entry)
+	return redirect(reverse(data_entry))
 
 
 def export_job_info_report(request):
@@ -235,4 +235,4 @@ def clear_report_info(request):
 	JOB_INFO["Payments"].clear()
 	JOB_INFO["Job Number Exists"].clear()
 
-	return redirect(data_entry)
+	return redirect(reverse(data_entry))
