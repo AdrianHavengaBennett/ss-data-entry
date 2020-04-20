@@ -34,8 +34,6 @@
 
 <hr>
 
-{% if not df_html.empty %}
-	{{ df_html | safe }}
-{% endif %}
+{{ df_html | safe }}
 
 {% endblock %}
