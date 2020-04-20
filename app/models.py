@@ -11,4 +11,4 @@ class Data(models.Model):
 	job_description = models.TextField()
 
 	def __str__(self):
-		return self.name
+		return self.plentific_job_number
