@@ -47,7 +47,7 @@ def do_update_and_collect_job_info(request, obj, commission_pre_vat=0, payments=
 	else:
 		JOB_INFO["Payments"].append("match")
 
-	return redirect(reverse(data_entry))
+	return request
 
 
 def all_data(request):
@@ -189,7 +189,6 @@ def search_update_feedback(request):
 		return render(request, "multiples_update.html", {
 			"obj": obj, "commission_pre_vat": request.GET["commission_pre_vat"],
 			"payments": inputted_payment})
-
 
 
 def edit_specific(request, id, commission_pre_vat, payments):
