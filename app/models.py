@@ -14,14 +14,14 @@ class Data(models.Model):
 		return self.plentific_job_number
 
 
-# class JobInfoReport(models.Model):
-# 	"""The following are prefixed with 'r' to represent report"""
+class JobInfoReport(models.Model):
+	"""The following are prefixed with 'r' to represent report"""
 
-# 	r_plentific_job_number = models.CharField(max_length=7)
-# 	r_wo_number = models.IntegerField()
-# 	r_invoice_number_found = models.IntegerField()
-# 	r_payments = models.FloatField()
-# 	r_job_number_exists = models.CharField(max_length=3)
+	r_plentific_job_number = models.CharField(max_length=7)
+	r_wo_number = models.CharField(max_length=6)
+	r_invoice_number_found = models.CharField(max_length=5)
+	r_payments = models.CharField(max_length=100)
+	r_job_number_exists = models.CharField(max_length=50)
 
-# 	def __str__(self):
-# 		return self.r_plentific_job_number
+	def __str__(self):
+		return self.r_plentific_job_number

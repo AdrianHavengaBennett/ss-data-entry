@@ -7,3 +7,7 @@ a:hover {
 	color: #ffffff;
 	text-decoration: none;
 }
+
+table {
+	width: 100%;
+}

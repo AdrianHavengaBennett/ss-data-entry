@@ -1,27 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404, reverse, HttpResponse
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
-from .models import Data
+from .models import Data, JobInfoReport
 from .forms import DataForm, SearchAndUpdateForm
 from io import BytesIO
 import pandas as pd
 import xlsxwriter
 
 
-JOB_INFO = {
-	"Plentific Job Number": [],
-	"WorkOrder Number": [],
-	"Invoice Number Found": [],
-	"Payments": [],
-	"Job Number Exists": [],
-}
-
-
 def do_update_and_collect_job_info(request, obj, commission_pre_vat=0, payments=0):
-	"""Helper function to do heavy lifting"""
+	"""
+	Helper function to do heavy lifting
+	A new job_info report instance is created each time
+	"""
 
-	JOB_INFO["Plentific Job Number"].append("{}".format(obj.plentific_job_number))
-	JOB_INFO["WorkOrder Number"].append("{}".format(obj.wo_number))
-	JOB_INFO["Job Number Exists"].append("Yes")
+	job_info = JobInfoReport()
+
+	job_info.r_plentific_job_number = obj.plentific_job_number
+	job_info.r_wo_number = obj.wo_number
+	job_info.r_job_number_exists = "Yes"
 
 	if not request.GET.get("commission_pre_vat"):
 		obj.commission_pre_vat = commission_pre_vat
@@ -31,9 +27,9 @@ def do_update_and_collect_job_info(request, obj, commission_pre_vat=0, payments=
 	obj.save()
 
 	if obj.invoice_number:
-		JOB_INFO["Invoice Number Found"].append("{}".format(obj.invoice_number))
+		job_info.r_invoice_number_found = obj.invoice_number
 	else:
-		JOB_INFO["Invoice Number Found"].append("None")
+		job_info.r_invoice_number_found = "None"
 
 	if not request.GET.get("payments"):
 		inputted_payment = float(payments)
@@ -41,11 +37,12 @@ def do_update_and_collect_job_info(request, obj, commission_pre_vat=0, payments=
 		inputted_payment = float(request.GET.get("payments"))
 
 	if inputted_payment != obj.payments:
-		JOB_INFO["Payments"].append(
-			"don't match: expected £{}, received £{}".format(obj.payments,
-									    				   inputted_payment))
+		job_info.r_payments = "don't match: expected £{}, received £{}".format(
+			obj.payments, inputted_payment)
 	else:
-		JOB_INFO["Payments"].append("match")
+		job_info.r_payments = "match"
+
+	job_info.save()
 
 	return request
 
@@ -84,22 +81,25 @@ def data_entry(request):
 
 	form = SearchAndUpdateForm()
 
-	df = pd.DataFrame(JOB_INFO,
-		columns=[
-			"Plentific Job Number",
-			"WorkOrder Number",
-			"Invoice Number Found",
-			"Payments",
-			"Job Number Exists",
-		])
+	# df = pd.DataFrame(JOB_INFO,
+	# 	columns=[
+	# 		"Plentific Job Number",
+	# 		"WorkOrder Number",
+	# 		"Invoice Number Found",
+	# 		"Payments",
+	# 		"Job Number Exists",
+	# 	])
 
-	if not df.empty:
-		df_html = df.to_html(classes="table table-striped table-hover")
-		return render(request, "data_entry.html", {
-			"form": form, "df_html": df_html})
-	else:
-		return render(request, "data_entry.html", {
-				"form": form})
+	# if not df.empty:
+	# 	df_html = df.to_html(classes="table table-striped table-hover")
+	# 	return render(request, "data_entry.html", {
+	# 		"form": form, "df_html": df_html})
+	# else:
+
+	job_info = JobInfoReport.objects.all()
+
+	return render(request, "data_entry.html", {
+		"form": form, "job_info": job_info})
 
 
 def edit_data(request, id):
@@ -173,11 +173,15 @@ def search_update_feedback(request):
 		return redirect(reverse(data_entry))
 
 	except ObjectDoesNotExist:
-		JOB_INFO["Plentific Job Number"].append("N/A")
-		JOB_INFO["WorkOrder Number"].append("N/A")
-		JOB_INFO["Invoice Number Found"].append("N/A")
-		JOB_INFO["Payments"].append("N/A")
-		JOB_INFO["Job Number Exists"].append("Plentific Job Number {} not found".format(inputted_job_number))
+		job_info = JobInfoReport()
+
+		job_info.r_plentific_job_number = "N/A"
+		job_info.r_wo_number = "N/A"
+		job_info.r_job_number_exists = "Plentific Job Number {} not found".format(inputted_job_number)
+		job_info.r_invoice_number_found = "N/A"
+		job_info.r_payments = "N/A"
+
+		job_info.save()
 
 		return redirect(reverse(data_entry))
 
@@ -210,8 +214,7 @@ def export_job_info_report(request):
 	Exports the job_info list as an Excel spreadsheet
 	and saves it to user's local directory
 	"""
-
-	df = pd.DataFrame(JOB_INFO)
+	df = pd.DataFrame.from_records(JobInfoReport.objects.all().values())
 
 	output = BytesIO()
 	writer = pd.ExcelWriter(output, engine='xlsxwriter')
@@ -228,10 +231,6 @@ def export_job_info_report(request):
 def clear_report_info(request):
 	"""Empties the job_info dictionary"""
 
-	JOB_INFO["Plentific Job Number"].clear()
-	JOB_INFO["WorkOrder Number"].clear()
-	JOB_INFO["Invoice Number Found"].clear()
-	JOB_INFO["Payments"].clear()
-	JOB_INFO["Job Number Exists"].clear()
+	JobInfoReport.objects.all().delete()
 
 	return redirect(reverse(data_entry))

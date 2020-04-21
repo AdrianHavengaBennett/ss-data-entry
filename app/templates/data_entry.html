@@ -34,6 +34,25 @@
 
 <hr>
 
-{{ df_html | safe }}
+<table class="table table-striped table-hover">
+	{% if job_info %}
+	<tr>
+		<th>Plentific Job Number</th>
+		<th>WorkOrder Number</th>
+		<th>Invoice Number Found</th>
+		<th>Payments</th>
+		<th>Job Number Exists</th>
+	</tr>
+	{% endif %}
+	{% for d in job_info %}
+		<tr>
+			<td>{{ d.r_plentific_job_number }}</td>
+			<td>{{ d.r_wo_number }}</td>
+			<td>{{ d.r_invoice_number_found }}</td>
+			<td>{{ d.r_payments }}</td>
+			<td>{{ d.r_job_number_exists }}</td>
+		</tr>
+	{% endfor %}
+</table>
 
 {% endblock %}
