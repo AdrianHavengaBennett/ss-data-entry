@@ -81,21 +81,6 @@ def data_entry(request):
 
 	form = SearchAndUpdateForm()
 
-	# df = pd.DataFrame(JOB_INFO,
-	# 	columns=[
-	# 		"Plentific Job Number",
-	# 		"WorkOrder Number",
-	# 		"Invoice Number Found",
-	# 		"Payments",
-	# 		"Job Number Exists",
-	# 	])
-
-	# if not df.empty:
-	# 	df_html = df.to_html(classes="table table-striped table-hover")
-	# 	return render(request, "data_entry.html", {
-	# 		"form": form, "df_html": df_html})
-	# else:
-
 	job_info = JobInfoReport.objects.all()
 
 	return render(request, "data_entry.html", {
@@ -211,7 +196,7 @@ def edit_specific(request, id, commission_pre_vat, payments):
 
 def export_job_info_report(request):
 	"""
-	Exports the job_info list as an Excel spreadsheet
+	Exports the job_info model as an Excel spreadsheet
 	and saves it to user's local directory
 	"""
 	df = pd.DataFrame.from_records(JobInfoReport.objects.all().values())
@@ -229,7 +214,7 @@ def export_job_info_report(request):
 
 
 def clear_report_info(request):
-	"""Empties the job_info dictionary"""
+	"""Empties the job_info model data"""
 
 	JobInfoReport.objects.all().delete()
 
